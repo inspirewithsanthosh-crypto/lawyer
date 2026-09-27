@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00a884">
+<title>Saso — Messenger</title>
+<style>
+:root{
+  --green:#00a884; --green2:#008f72; --bg:#111b21; --panel:#202c33; --panel2:#182229;
+  --border:#2a3942; --text:#e9edef; --muted:#8696a0; --bubble:#005c4b; --bubble2:#202c33;
+  --danger:#ef5350; --shadow:0 2px 8px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b141a;color:var(--text);height:100vh;overflow:hidden}
+button,input,textarea{font:inherit}
+.app{height:100vh;display:flex;max-width:1600px;margin:auto;background:var(--bg)}
+.sidebar{width:380px;min-width:320px;background:var(--panel2);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:var(--panel)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:20px}
+.logo{width:36px;height:36px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#06271f;font-weight:900}
+.iconbtn{border:0;background:transparent;color:var(--muted);cursor:pointer;width:38px;height:38px;border-radius:50%}
+.iconbtn:hover{background:#2b3941;color:var(--text)}
+.tools{display:flex;gap:2px}
+.search{padding:9px 12px;background:var(--panel);border-bottom:1px solid var(--border)}
+.searchbox{display:flex;align-items:center;gap:8px;background:#2a3942;border-radius:9px;padding:0 12px;height:38px}
+.searchbox input{width:100%;border:0;outline:0;background:transparent;color:var(--text)}
+.tabs{display:flex;border-bottom:1px solid var(--border)}
+.tab{flex:1;border:0;background:transparent;color:var(--muted);padding:12px 8px;cursor:pointer;font-size:13px}
+.tab.active{color:var(--green);border-bottom:2px solid var(--green)}
+.chatlist{overflow:auto;flex:1}
+.chatitem{display:flex;gap:12px;padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03)}
+.chatitem:hover,.chatitem.active{background:#233138}
+.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#54656f;color:#fff;font-weight:700;flex:none}
+.chatmeta{min-width:0;flex:1}
+.row{display:flex;justify-content:space-between;gap:8px}
+.name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{font-size:11px;color:var(--muted)}
+.preview{color:var(--muted);font-size:13px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{min-width:18px;height:18px;border-radius:10px;background:var(--green);color:#06271f;display:inline-grid;place-items:center;padding:0 5px;font-size:10px;font-weight:800}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:#0b141a;position:relative}
+.empty{flex:1;display:grid;place-items:center;color:var(--muted);text-align:center;padding:40px}
+.empty h1{color:var(--text);font-size:22px;margin:8px 0}
+.threadhead{height:62px;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--panel);border-bottom:1px solid var(--border)}
+.threadhead .avatar{width:40px;height:40px}
+.titleblock{min-width:0;flex:1}
+.subtitle{font-size:11px;color:var(--green);margin-top:3px}
+.messages{flex:1;overflow:auto;padding:18px 6%;background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px);background-size:18px 18px}
+.day{display:flex;justify-content:center;margin:10px 0 18px}
+.day span{background:#1e2a31;color:#c4cfd4;padding:6px 10px;border-radius:7px;font-size:11px}
+.msg{display:flex;margin:3px 0}
+.msg.me{justify-content:flex-end}
+.bubble{max-width:min(72%,680px);padding:7px 9px 6px;border-radius:8px;box-shadow:var(--shadow);position:relative;line-height:1.4;font-size:14px}
+.msg.them .bubble{background:var(--bubble2);border-top-left-radius:2px}
+.msg.me .bubble{background:var(--bubble);border-top-right-radius:2px}
+.msgtime{font-size:9px;color:#b3c0c5;margin-left:8px;float:right;margin-top:3px}
+.read{color:#53bdeb}
+.replypreview{border-left:3px solid var(--green);background:rgba(0,0,0,.12);padding:5px;margin-bottom:5px;font-size:11px;color:#cdd6da}
+.media{margin-top:4px;border-radius:7px;max-width:100%;display:block}
+.composer{min-height:64px;padding:10px 14px;background:var(--panel);display:flex;align-items:center;gap:8px}
+.composebox{flex:1;background:#2a3942;border-radius:9px;padding:9px 12px}
+.composebox textarea{width:100%;max-height:120px;resize:none;border:0;outline:0;background:transparent;color:var(--text);line-height:1.4}
+.send{width:42px;height:42px;border:0;border-radius:50%;background:var(--green);color:#06271f;cursor:pointer;font-weight:900}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;z-index:10}
+.modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(440px,92vw);background:var(--panel);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.5);overflow:hidden}
+.modalhead{padding:18px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.modalbody{padding:18px}
+.field{margin-bottom:13px}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.field input,.field select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:#111b21;color:var(--text);outline:0}
+.primary{border:0;border-radius:8px;background:var(--green);color:#06271f;font-weight:800;padding:10px 14px;cursor:pointer}
+.secondary{border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);padding:10px 14px;cursor:pointer}
+.modalfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+.file{display:none}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#26343b;color:#fff;padding:10px 14px;border-radius:8px;font-size:13px;display:none;z-index:30}
+.mobileback{display:none}
+@media(max-width:820px){
+ .sidebar{width:100%;min-width:0}.main{display:none}.sidebar.mobilehidden{display:none}.main.mobilevisible{display:flex}
+ .mobileback{display:block}
+ .messages{padding:18px 4%}
+ .bubble{max-width:84%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="topbar">
+      <div class="brand"><div class="logo">S</div><span>Saso</span></div>
+      <div class="tools">
+        <button class="iconbtn" title="New chat" onclick="showModal('new')">✚</button>
+        <button class="iconbtn" title="Profile" onclick="showModal('profile')">◉</button>
+        <button class="iconbtn" title="Settings" onclick="showModal('settings')">⚙</button>
+      </div>
+    </div>
+    <div class="search"><div class="searchbox">⌕<input id="search" placeholder="Search or start new chat" oninput="renderList()"></div></div>
+    <div class="tabs">
+      <button class="tab active" onclick="setTab(this,'chats')">Chats</button>
+      <button class="tab" onclick="setTab(this,'calls')">Calls</button>
+      <button class="tab" onclick="setTab(this,'contacts')">Contacts</button>
+    </div>
+    <div class="chatlist" id="list"></div>
+  </aside>
+  <main class="main" id="main">
+    <div class="empty" id="empty">
+      <div><div class="logo" style="margin:auto">S</div><h1>Welcome to Saso</h1><div>Private messaging, locally stored on your device.</div></div>
+    </div>
+    <div id="thread" style="display:none;flex:1;flex-direction:column;min-height:0">
+      <div class="threadhead">
+        <button class="iconbtn mobileback" onclick="mobileBack()">‹</button>
+        <div class="avatar" id="theadAvatar">A</div>
+        <div class="titleblock"><div class="name" id="theadName">Contact</div><div class="subtitle" id="theadStatus">online</div></div>
+        <button class="iconbtn" title="Voice call" onclick="toast('Voice call UI opened')">☎</button>
+        <button class="iconbtn" title="Video call" onclick="toast('Video call UI opened')">▣</button>
+        <button class="iconbtn" title="More" onclick="showModal('chat')">⋮</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <form class="composer" id="composer">
+        <button type="button" class="iconbtn" title="Attach file" onclick="document.getElementById('file').click()">＋</button>
+        <input class="file" type="file" id="file" multiple onchange="attachFiles()">
+        <div class="composebox"><textarea id="text" rows="1" placeholder="Type a message"></textarea></div>
+        <button class="send" type="submit">➤</button>
+      </form>
+    </div>
+  </main>
+</div>
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const seed=[
+ {id:'a1',name:'Santhosh',avatar:'S',status:'online',messages:[
+  {from:'them',text:'Hi! Welcome to Saso 👋',time:'10:12 AM'},
+  {from:'me',text:'Hi Santhosh!',time:'10:13 AM',read:true}
+ ]},
+ {id:'a2',name:'Friends Group',avatar:'F',status:'5 members',messages:[
+  {from:'them',text:'Anyone free this evening?',time:'9:42 AM'},
+  {from:'me',text:'Yes, I am free.',time:'9:45 AM',read:true}
+ ]},
+ {id:'a3',name:'Priya',avatar:'P',status:'last seen recently',messages:[
+  {from:'them',text:'Can you send the file?',time:'Yesterday'}
+ ]},
+];
+let data=JSON.parse(localStorage.getItem('sasoData')||'null')||seed;
+let selected=null, tab='chats';
+const save=()=>localStorage.setItem('sasoData',JSON.stringify(data));
+function initials(name){return name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase()}
+function renderList(){
+ const q=document.getElementById('search').value.toLowerCase();
+ const list=document.getElementById('list');
+ let items=data.filter(x=>x.name.toLowerCase().includes(q));
+ if(tab==='contacts'){}
+ if(tab==='calls'){list.innerHTML='<div class="empty" style="height:50vh"><div>No recent calls<br><small>Calling UI is available inside chats.</small></div></div>';return}
+ list.innerHTML=items.map(x=>{
+   const last=x.messages[x.messages.length-1];
+   return `<div class="chatitem ${selected===x.id?'active':''}" onclick="openChat('${x.id}')">
+    <div class="avatar">${initials(x.name)}</div>
+    <div class="chatmeta"><div class="row"><div class="name">${esc(x.name)}</div><div class="time">${esc(last?.time||'')}</div></div>
+    <div class="preview">${last?.from==='me'?'You: ':''}${esc(last?.text||'No messages')}</div></div></div>`;
+ }).join('');
+}
+function openChat(id){
+ selected=id; const c=data.find(x=>x.id===id); if(!c)return;
+ document.getElementById('empty').style.display='none'; document.getElementById('thread').style.display='flex';
+ document.getElementById('theadAvatar').textContent=initials(c.name);
+ document.getElementById('theadName').textContent=c.name; document.getElementById('theadStatus').textContent=c.status;
+ renderMessages(); renderList();
+ if(innerWidth<=820){document.getElementById('sidebar').classList.add('mobilehidden');document.getElementById('main').classList.add('mobilevisible')}
+}
+function renderMessages(){
+ const c=data.find(x=>x.id===selected); if(!c)return;
+ const box=document.getElementById('messages');
+ box.innerHTML='<div class="day"><span>TODAY</span></div>'+c.messages.map(m=>`
+ <div class="msg ${m.from==='me'?'me':'them'}"><div class="bubble">
+ ${m.reply?`<div class="replypreview">${esc(m.reply)}</div>`:''}
+ ${m.file?`<div>📎 ${esc(m.file)}</div>`:''}${esc(m.text||'')}
+ <span class="msgtime">${esc(m.time||'now')} ${m.from==='me'?'<span class="read">✓✓</span>':''}</span>
+ </div></div>`).join('');
+ box.scrollTop=box.scrollHeight;
+}
+function send(){
+ const t=document.getElementById('text'); const text=t.value.trim(); if(!text||!selected)return;
+ const c=data.find(x=>x.id===selected); c.messages.push({from:'me',text,time:now(),read:true}); save(); t.value=''; t.style.height='auto'; renderMessages(); renderList();
+ setTimeout(()=>{c.messages.push({from:'them',text:autoReply(text),time:now()});save();renderMessages();renderList();toast(c.name+' replied')},700);
+}
+function autoReply(t){
+ const s=t.toLowerCase(); if(s.includes('hello')||s==='hi')return 'Hi! 👋'; if(s.includes('how are you'))return 'I am good! How are you?'; if(s.includes('?'))return 'Sure, I will get back to you soon.'; return 'Thanks for your message 🙂';
+}
+function attachFiles(){
+ const f=document.getElementById('file').files; if(!selected||!f.length)return;
+ const c=data.find(x=>x.id===selected); [...f].forEach(x=>c.messages.push({from:'me',file:x.name,text:'',time:now(),read:true}));
+ save();renderMessages();renderList();toast(f.length+' file(s) attached');
+}
+function now(){return new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}
+function esc(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function setTab(btn,name){tab=name;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderList()}
+function mobileBack(){document.getElementById('sidebar').classList.remove('mobilehidden');document.getElementById('main').classList.remove('mobilevisible')}
+function newChat(){showModal('new')}
+function showModal(type){
+ const overlay=document.getElementById('overlay'), modal=document.getElementById('modal'); overlay.style.display='block';
+ if(type==='new')modal.innerHTML=`<div class="modalhead">New chat <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
+ <div class="field"><label>Contact name</label><input id="newname" placeholder="e.g. Alex"></div>
+ <div class="field"><label>Status</label><input id="newstatus" value="online"></div>
+ <div class="modalfoot"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="createContact()">Create</button></div></div>`;
+ if(type==='profile')modal.innerHTML=`<div class="modalhead">Profile <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
+ <div class="field"><label>Your display name</label><input id="myname" value="${esc(localStorage.getItem('sasoName')||'Saso User')}"></div>
+ <div class="field"><label>About</label><input id="myabout" value="${esc(localStorage.getItem('sasoAbout')||'Available')}"></div>
+ <div class="modalfoot"><button class="primary" onclick="saveProfile()">Save</button></div></div>`;
+ if(type==='settings')modal.innerHTML=`<div class="modalhead">Settings <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
+ <div class="field"><label>Theme</label><select id="theme"><option>Dark</option><option>Light</option></select></div>
+ <div class="field"><label>Data</label><button class="secondary" onclick="resetData()">Reset local chats</button></div>
+ <div class="modalfoot"><button class="primary" onclick="saveSettings()">Save</button></div></div>`;
+ if(type==='chat')modal.innerHTML=`<div class="modalhead">Chat options <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
+ <button class="secondary" onclick="toast('Chat muted');closeModal()">🔕 Mute notifications</button>
+ <button class="secondary" style="margin-left:7px" onclick="toast('Search opened');closeModal()">⌕ Search messages</button>
+ </div>`;
+}
+function closeModal(){document.getElementById('overlay').style.display='none'}
+function createContact(){const n=document.getElementById('newname').value.trim();if(!n)return;const id='c'+Date.now();data.unshift({id,name:n,avatar:initials(n),status:document.getElementById('newstatus').value||'online',messages:[]});save();closeModal();renderList();openChat(id)}
+function saveProfile(){localStorage.setItem('sasoName',document.getElementById('myname').value);localStorage.setItem('sasoAbout',document.getElementById('myabout').value);closeModal();toast('Profile saved')}
+function saveSettings(){const v=document.getElementById('theme').value;if(v==='Light'){document.documentElement.style.setProperty('--bg','#efeae2');document.documentElement.style.setProperty('--panel','#f0f2f5');document.documentElement.style.setProperty('--panel2','#f7f8fa');document.documentElement.style.setProperty('--text','#1f2c33');document.documentElement.style.setProperty('--muted','#667781');document.documentElement.style.setProperty('--bubble2','#fff');document.body.style.background='#efeae2'}else location.reload();closeModal()}
+function resetData(){if(confirm('Delete all local chats?')){localStorage.removeItem('sasoData');location.reload()}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display='none',1800)}
+document.getElementById('composer').addEventListener('submit',e=>{e.preventDefault();send()});
+document.getElementById('text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+document.getElementById('text').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});
+renderList();
+</script>
+</body>
+</html>
