@@ -3,228 +3,672 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#00a884">
-<title>Saso — Messenger</title>
+<title>Sterling & Voss | Attorneys at Law</title>
+<meta name="description" content="Sterling & Voss is a boutique law firm providing corporate, litigation, family, and estate counsel with precision, discretion, and results.">
+<meta name="theme-color" content="#0E1F1A">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Sterling & Voss | Attorneys at Law">
+<meta property="og:description" content="Advocacy with precision and integrity. Corporate, litigation, family, and estate law counsel.">
+<meta property="og:type" content="website">
+
+<!-- Favicon (inline scales-of-justice glyph, no external file needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230E1F1A'/%3E%3Cline x1='50' y1='18' x2='50' y2='72' stroke='%23C6A15B' stroke-width='4'/%3E%3Cline x1='22' y1='30' x2='78' y2='30' stroke='%23C6A15B' stroke-width='4'/%3E%3Ccircle cx='22' cy='42' r='9' fill='none' stroke='%23C6A15B' stroke-width='4'/%3E%3Ccircle cx='78' cy='42' r='9' fill='none' stroke='%23C6A15B' stroke-width='4'/%3E%3Crect x='40' y='72' width='20' height='6' rx='2' fill='%23C6A15B'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --green:#00a884; --green2:#008f72; --bg:#111b21; --panel:#202c33; --panel2:#182229;
-  --border:#2a3942; --text:#e9edef; --muted:#8696a0; --bubble:#005c4b; --bubble2:#202c33;
-  --danger:#ef5350; --shadow:0 2px 8px rgba(0,0,0,.28);
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b141a;color:var(--text);height:100vh;overflow:hidden}
-button,input,textarea{font:inherit}
-.app{height:100vh;display:flex;max-width:1600px;margin:auto;background:var(--bg)}
-.sidebar{width:380px;min-width:320px;background:var(--panel2);border-right:1px solid var(--border);display:flex;flex-direction:column}
-.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:var(--panel)}
-.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:20px}
-.logo{width:36px;height:36px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#06271f;font-weight:900}
-.iconbtn{border:0;background:transparent;color:var(--muted);cursor:pointer;width:38px;height:38px;border-radius:50%}
-.iconbtn:hover{background:#2b3941;color:var(--text)}
-.tools{display:flex;gap:2px}
-.search{padding:9px 12px;background:var(--panel);border-bottom:1px solid var(--border)}
-.searchbox{display:flex;align-items:center;gap:8px;background:#2a3942;border-radius:9px;padding:0 12px;height:38px}
-.searchbox input{width:100%;border:0;outline:0;background:transparent;color:var(--text)}
-.tabs{display:flex;border-bottom:1px solid var(--border)}
-.tab{flex:1;border:0;background:transparent;color:var(--muted);padding:12px 8px;cursor:pointer;font-size:13px}
-.tab.active{color:var(--green);border-bottom:2px solid var(--green)}
-.chatlist{overflow:auto;flex:1}
-.chatitem{display:flex;gap:12px;padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03)}
-.chatitem:hover,.chatitem.active{background:#233138}
-.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#54656f;color:#fff;font-weight:700;flex:none}
-.chatmeta{min-width:0;flex:1}
-.row{display:flex;justify-content:space-between;gap:8px}
-.name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.time{font-size:11px;color:var(--muted)}
-.preview{color:var(--muted);font-size:13px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.badge{min-width:18px;height:18px;border-radius:10px;background:var(--green);color:#06271f;display:inline-grid;place-items:center;padding:0 5px;font-size:10px;font-weight:800}
-.main{flex:1;min-width:0;display:flex;flex-direction:column;background:#0b141a;position:relative}
-.empty{flex:1;display:grid;place-items:center;color:var(--muted);text-align:center;padding:40px}
-.empty h1{color:var(--text);font-size:22px;margin:8px 0}
-.threadhead{height:62px;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--panel);border-bottom:1px solid var(--border)}
-.threadhead .avatar{width:40px;height:40px}
-.titleblock{min-width:0;flex:1}
-.subtitle{font-size:11px;color:var(--green);margin-top:3px}
-.messages{flex:1;overflow:auto;padding:18px 6%;background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px);background-size:18px 18px}
-.day{display:flex;justify-content:center;margin:10px 0 18px}
-.day span{background:#1e2a31;color:#c4cfd4;padding:6px 10px;border-radius:7px;font-size:11px}
-.msg{display:flex;margin:3px 0}
-.msg.me{justify-content:flex-end}
-.bubble{max-width:min(72%,680px);padding:7px 9px 6px;border-radius:8px;box-shadow:var(--shadow);position:relative;line-height:1.4;font-size:14px}
-.msg.them .bubble{background:var(--bubble2);border-top-left-radius:2px}
-.msg.me .bubble{background:var(--bubble);border-top-right-radius:2px}
-.msgtime{font-size:9px;color:#b3c0c5;margin-left:8px;float:right;margin-top:3px}
-.read{color:#53bdeb}
-.replypreview{border-left:3px solid var(--green);background:rgba(0,0,0,.12);padding:5px;margin-bottom:5px;font-size:11px;color:#cdd6da}
-.media{margin-top:4px;border-radius:7px;max-width:100%;display:block}
-.composer{min-height:64px;padding:10px 14px;background:var(--panel);display:flex;align-items:center;gap:8px}
-.composebox{flex:1;background:#2a3942;border-radius:9px;padding:9px 12px}
-.composebox textarea{width:100%;max-height:120px;resize:none;border:0;outline:0;background:transparent;color:var(--text);line-height:1.4}
-.send{width:42px;height:42px;border:0;border-radius:50%;background:var(--green);color:#06271f;cursor:pointer;font-weight:900}
-.overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;z-index:10}
-.modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(440px,92vw);background:var(--panel);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.5);overflow:hidden}
-.modalhead{padding:18px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
-.modalbody{padding:18px}
-.field{margin-bottom:13px}
-.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-.field input,.field select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:#111b21;color:var(--text);outline:0}
-.primary{border:0;border-radius:8px;background:var(--green);color:#06271f;font-weight:800;padding:10px 14px;cursor:pointer}
-.secondary{border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);padding:10px 14px;cursor:pointer}
-.modalfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
-.file{display:none}
-.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#26343b;color:#fff;padding:10px 14px;border-radius:8px;font-size:13px;display:none;z-index:30}
-.mobileback{display:none}
-@media(max-width:820px){
- .sidebar{width:100%;min-width:0}.main{display:none}.sidebar.mobilehidden{display:none}.main.mobilevisible{display:flex}
- .mobileback{display:block}
- .messages{padding:18px 4%}
- .bubble{max-width:84%}
-}
+  :root{
+    --ink:#0E1F1A;
+    --ink-2:#132922;
+    --parchment:#F3EEE2;
+    --parchment-dim:#CBC4B2;
+    --brass:#C6A15B;
+    --brass-dim:#8E7846;
+    --line:rgba(243,238,226,0.14);
+    --radius:2px;
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  section{padding:7rem 1.5rem;}
+  .wrap{max-width:1120px; margin:0 auto;}
+
+  h1,h2,h3{font-family:var(--serif); font-weight:500; letter-spacing:-0.01em;}
+  h2{font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:0.6rem;}
+  .eyebrow{
+    font-size:0.78rem;
+    color:var(--brass);
+    letter-spacing:0.04em;
+    margin-bottom:0.9rem;
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--brass);}
+
+  .section-head{max-width:640px; margin-bottom:3.2rem;}
+  .section-head p{color:var(--parchment-dim); font-size:1.02rem; max-width:56ch;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:0.9rem 1.7rem;
+    font-size:0.92rem; font-weight:500;
+    border-radius:var(--radius);
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--brass); color:var(--ink); }
+  .btn-primary:hover{ background:#D9B472; transform:translateY(-2px); }
+  .btn-ghost{ border-color:var(--line); color:var(--parchment); }
+  .btn-ghost:hover{ border-color:var(--brass); color:var(--brass); transform:translateY(-2px); }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(14,31,26,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    max-width:1120px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.1rem 1.5rem;
+  }
+  .brand{
+    font-family:var(--serif); font-size:1.25rem; letter-spacing:0.01em;
+  }
+  .brand span{color:var(--brass);}
+  .nav-links{display:flex; gap:2.2rem; align-items:center;}
+  .nav-links a{
+    font-size:0.92rem; position:relative; padding:0.2rem 0; color:var(--parchment-dim);
+    transition:color 0.2s ease;
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px;
+    background:var(--brass); transition:width 0.25s ease;
+  }
+  .nav-links a:hover{color:var(--parchment);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:flex; align-items:center; gap:1.6rem;}
+
+  .hamburger{
+    display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:0.4rem;
+  }
+  .hamburger span{width:22px; height:2px; background:var(--parchment); transition:all 0.25s ease;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding:8rem 1.5rem 4rem;
+    position:relative;
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:3rem; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem,5vw,3.9rem);
+    line-height:1.08;
+    opacity:0; transform:translateY(18px);
+    animation:reveal 0.8s ease forwards;
+    animation-delay:0.15s;
+  }
+  .hero .lede{
+    margin-top:1.5rem; max-width:46ch; color:var(--parchment-dim); font-size:1.08rem;
+    opacity:0; transform:translateY(18px);
+    animation:reveal 0.8s ease forwards; animation-delay:0.42s;
+  }
+  .hero .cta-row{
+    margin-top:2.4rem; display:flex; gap:1rem; flex-wrap:wrap;
+    opacity:0; transform:translateY(18px);
+    animation:reveal 0.8s ease forwards; animation-delay:0.65s;
+  }
+  .hero-figure{
+    opacity:0;
+    animation:reveal 1s ease forwards; animation-delay:0.5s;
+  }
+  @keyframes reveal{ to{ opacity:1; transform:translateY(0); } }
+
+  .scales-svg path, .scales-svg line, .scales-svg circle{
+    stroke-dasharray:300; stroke-dashoffset:300;
+    animation:draw 2.2s ease forwards;
+    animation-delay:0.9s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  .hero-meta{
+    display:flex; gap:2.4rem; margin-top:3.4rem;
+    padding-top:1.6rem; border-top:1px solid var(--line);
+    opacity:0; transform:translateY(18px);
+    animation:reveal 0.8s ease forwards; animation-delay:0.85s;
+  }
+  .hero-meta div b{ font-family:var(--serif); font-size:1.5rem; display:block; color:var(--brass); font-weight:500;}
+  .hero-meta div small{ color:var(--parchment-dim); font-size:0.82rem; }
+
+  /* ---------- About ---------- */
+  .about{ background:var(--ink-2); }
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:start; }
+  .about p{ color:var(--parchment-dim); margin-bottom:1.1rem; max-width:52ch; }
+  .credentials{ display:grid; gap:0.9rem; margin-top:1.6rem; }
+  .credentials li{
+    display:flex; gap:0.8rem; align-items:baseline; font-size:0.95rem; color:var(--parchment-dim);
+    border-top:1px solid var(--line); padding-top:0.8rem;
+  }
+  .credentials li:first-child{ border-top:none; padding-top:0; }
+  .credentials b{ color:var(--parchment); font-weight:500; min-width:120px; }
+
+  /* ---------- Practice Areas ---------- */
+  .practice-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; background:var(--line); border:1px solid var(--line);
+  }
+  .practice-card{
+    background:var(--ink); padding:2.4rem 2rem; position:relative; overflow:hidden;
+    transition:background 0.3s ease;
+  }
+  .practice-card::before{
+    content:""; position:absolute; left:0; top:0; width:2px; height:0; background:var(--brass);
+    transition:height 0.3s ease;
+  }
+  .practice-card:hover{ background:var(--ink-2); }
+  .practice-card:hover::before{ height:100%; }
+  .practice-card svg{ width:30px; height:30px; margin-bottom:1.3rem; }
+  .practice-card h3{ font-size:1.15rem; margin-bottom:0.5rem; font-weight:500; }
+  .practice-card p{ color:var(--parchment-dim); font-size:0.92rem; }
+
+  /* ---------- Process ---------- */
+  .process-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; margin-top:2rem;
+  }
+  .process-row::before{
+    content:""; position:absolute; top:22px; left:0; right:0; height:1px; background:var(--line);
+  }
+  .process-step{ padding:0 1.6rem 0 0; position:relative; }
+  .process-num{
+    font-family:var(--serif); color:var(--brass); font-size:1.1rem;
+    background:var(--ink); display:inline-block; padding-right:0.8rem; position:relative; z-index:2;
+  }
+  .process-step h3{ margin-top:1.3rem; font-size:1.08rem; font-weight:500; }
+  .process-step p{ color:var(--parchment-dim); font-size:0.9rem; margin-top:0.4rem; max-width:32ch; }
+
+  /* ---------- Team ---------- */
+  .team-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+  .team-card{ text-align:left; }
+  .avatar{
+    width:100%; aspect-ratio:1/1; border-radius:var(--radius);
+    background:linear-gradient(160deg,var(--ink-2),var(--ink));
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-size:2.4rem; color:var(--brass); margin-bottom:1.1rem;
+  }
+  .team-card h3{ font-size:1.1rem; font-weight:500; }
+  .team-card .role{ color:var(--brass); font-size:0.85rem; margin:0.2rem 0 0.7rem; }
+  .team-card p{ color:var(--parchment-dim); font-size:0.9rem; }
+
+  /* ---------- Testimonials ---------- */
+  .testimonials{ background:var(--ink-2); }
+  .test-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; }
+  .test-card{
+    border:1px solid var(--line); padding:2rem; position:relative;
+  }
+  .test-mark{ font-family:var(--serif); font-size:2.6rem; color:var(--brass); line-height:1; display:block; margin-bottom:0.8rem; }
+  .test-card p{ color:var(--parchment-dim); font-size:0.95rem; margin-bottom:1.4rem; }
+  .test-name{ font-size:0.9rem; color:var(--parchment); font-weight:500; }
+  .test-role{ font-size:0.8rem; color:var(--parchment-dim); }
+  .placeholder-tag{ font-size:0.7rem; color:var(--brass-dim); letter-spacing:0.03em; margin-top:0.6rem; display:block; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:3.5rem; }
+  .contact-info li{
+    border-top:1px solid var(--line); padding:1.1rem 0; font-size:0.95rem; color:var(--parchment-dim);
+  }
+  .contact-info li:first-child{ border-top:none; padding-top:0; }
+  .contact-info b{ display:block; color:var(--parchment); margin-bottom:0.2rem; font-weight:500; }
+
+  form{ display:grid; gap:1.1rem; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
+  label{ font-size:0.82rem; color:var(--parchment-dim); margin-bottom:0.4rem; display:block; }
+  input, select, textarea{
+    width:100%; background:var(--ink-2); border:1px solid var(--line); color:var(--parchment);
+    padding:0.85rem 1rem; font-family:var(--sans); font-size:0.95rem; border-radius:var(--radius);
+    transition:border-color 0.2s ease;
+  }
+  input:focus, select:focus, textarea:focus{ outline:none; border-color:var(--brass); }
+  textarea{ resize:vertical; min-height:110px; }
+  .field-error{ color:#E08A6B; font-size:0.78rem; margin-top:0.35rem; display:none; }
+  .field.invalid .field-error{ display:block; }
+  .field.invalid input, .field.invalid select, .field.invalid textarea{ border-color:#E08A6B; }
+  .form-msg{
+    margin-top:0.6rem; padding:0.9rem 1rem; border:1px solid var(--brass); color:var(--brass);
+    font-size:0.88rem; display:none;
+  }
+  .form-msg.show{ display:block; }
+
+  /* ---------- Footer ---------- */
+  footer{ border-top:1px solid var(--line); padding:3.5rem 1.5rem 2rem; }
+  .footer-grid{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem; padding-bottom:2rem;
+  }
+  .footer-nav{ display:flex; gap:1.8rem; flex-wrap:wrap; }
+  .footer-nav a{ color:var(--parchment-dim); font-size:0.9rem; transition:color 0.2s ease; }
+  .footer-nav a:hover{ color:var(--brass); }
+  .footer-social{ display:flex; gap:1.2rem; }
+  .footer-social a{ color:var(--parchment-dim); font-size:0.9rem; transition:color 0.2s ease; }
+  .footer-social a:hover{ color:var(--brass); }
+  .footer-bottom{
+    border-top:1px solid var(--line); padding-top:1.6rem; display:flex; justify-content:space-between;
+    font-size:0.8rem; color:var(--parchment-dim); flex-wrap:wrap; gap:0.6rem;
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:960px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero-figure{ order:-1; max-width:220px; margin:0 auto; }
+    .about-grid, .contact-grid{ grid-template-columns:1fr; gap:2.4rem; }
+    .practice-grid{ grid-template-columns:repeat(2,1fr); }
+    .team-grid{ grid-template-columns:repeat(2,1fr); }
+    .test-grid{ grid-template-columns:1fr; }
+    .process-row{ grid-template-columns:1fr; gap:2.2rem; }
+    .process-row::before{ display:none; }
+  }
+
+  @media (max-width:680px){
+    section{ padding:4.5rem 1.2rem; }
+    .nav-links{
+      position:fixed; top:64px; left:0; right:0; bottom:0;
+      background:var(--ink); flex-direction:column; align-items:flex-start; gap:0;
+      padding:1rem 1.5rem; transform:translateX(100%); transition:transform 0.3s ease;
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .nav-links a{ width:100%; padding:1rem 0; border-bottom:1px solid var(--line); }
+    .nav-cta .btn-ghost{ display:none; }
+    .hamburger{ display:flex; }
+    .practice-grid, .team-grid{ grid-template-columns:1fr; }
+    .form-row{ grid-template-columns:1fr; }
+    .footer-grid{ flex-direction:column; }
+  }
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="topbar">
-      <div class="brand"><div class="logo">S</div><span>Saso</span></div>
-      <div class="tools">
-        <button class="iconbtn" title="New chat" onclick="showModal('new')">✚</button>
-        <button class="iconbtn" title="Profile" onclick="showModal('profile')">◉</button>
-        <button class="iconbtn" title="Settings" onclick="showModal('settings')">⚙</button>
+
+<header>
+  <nav>
+    <a href="#home" class="brand">Sterling <span>&</span> Voss</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#practice">Practice Areas</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#team">Attorneys</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-ghost">Book a Consultation</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow" style="opacity:0; animation:reveal 0.8s ease forwards;">Sterling & Voss, LLP</div>
+        <h1>Advocacy built on precision, discretion, and results.</h1>
+        <p class="lede">We represent individuals and businesses through corporate transactions, litigation, and family matters — with the rigor of a large firm and the attention of a small one.</p>
+        <div class="cta-row">
+          <a href="#contact" class="btn btn-primary">Book a Consultation</a>
+          <a href="#practice" class="btn btn-ghost">Our Practice Areas</a>
+        </div>
+        <div class="hero-meta">
+          <div><b>18+</b><small>Years in practice</small></div>
+          <div><b>640</b><small>Matters resolved</small></div>
+          <div><b>3</b><small>State bar admissions</small></div>
+        </div>
+      </div>
+      <div class="hero-figure">
+        <svg class="scales-svg" viewBox="0 0 200 220" width="100%" fill="none" stroke="#C6A15B" stroke-width="2.5">
+          <line x1="100" y1="14" x2="100" y2="150"/>
+          <line x1="40" y1="40" x2="160" y2="40"/>
+          <path d="M40 40 L20 90 A24 24 0 0 0 60 90 Z"/>
+          <path d="M160 40 L140 90 A24 24 0 0 0 180 90 Z"/>
+          <line x1="70" y1="150" x2="130" y2="150"/>
+          <line x1="100" y1="150" x2="100" y2="175"/>
+          <path d="M60 175 L140 175 L150 205 L50 205 Z"/>
+        </svg>
       </div>
     </div>
-    <div class="search"><div class="searchbox">⌕<input id="search" placeholder="Search or start new chat" oninput="renderList()"></div></div>
-    <div class="tabs">
-      <button class="tab active" onclick="setTab(this,'chats')">Chats</button>
-      <button class="tab" onclick="setTab(this,'calls')">Calls</button>
-      <button class="tab" onclick="setTab(this,'contacts')">Contacts</button>
-    </div>
-    <div class="chatlist" id="list"></div>
-  </aside>
-  <main class="main" id="main">
-    <div class="empty" id="empty">
-      <div><div class="logo" style="margin:auto">S</div><h1>Welcome to Saso</h1><div>Private messaging, locally stored on your device.</div></div>
-    </div>
-    <div id="thread" style="display:none;flex:1;flex-direction:column;min-height:0">
-      <div class="threadhead">
-        <button class="iconbtn mobileback" onclick="mobileBack()">‹</button>
-        <div class="avatar" id="theadAvatar">A</div>
-        <div class="titleblock"><div class="name" id="theadName">Contact</div><div class="subtitle" id="theadStatus">online</div></div>
-        <button class="iconbtn" title="Voice call" onclick="toast('Voice call UI opened')">☎</button>
-        <button class="iconbtn" title="Video call" onclick="toast('Video call UI opened')">▣</button>
-        <button class="iconbtn" title="More" onclick="showModal('chat')">⋮</button>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div>
+        <div class="eyebrow reveal">About the Firm</div>
+        <h2 class="reveal">Counsel that treats your matter like it's the only one we have.</h2>
       </div>
-      <div class="messages" id="messages"></div>
-      <form class="composer" id="composer">
-        <button type="button" class="iconbtn" title="Attach file" onclick="document.getElementById('file').click()">＋</button>
-        <input class="file" type="file" id="file" multiple onchange="attachFiles()">
-        <div class="composebox"><textarea id="text" rows="1" placeholder="Type a message"></textarea></div>
-        <button class="send" type="submit">➤</button>
+      <div class="reveal">
+        <p>Founded in 2008, Sterling & Voss is a boutique firm built around direct partner involvement — every client works with an attorney, not a case manager. We take on a limited number of matters at a time so nothing gets handled at arm's length.</p>
+        <p>Our approach favors clear counsel over billable hours: we tell clients plainly what a matter will cost, how long it will take, and what the realistic outcomes are.</p>
+        <ul class="credentials">
+          <li><b>Founded</b> 2008, three-attorney partnership</li>
+          <li><b>Bar admissions</b> New York, New Jersey, Connecticut</li>
+          <li><b>Focus areas</b> Corporate, litigation, family, real estate, estates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRACTICE AREAS -->
+  <section id="practice">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Practice Areas</div>
+        <h2>Where we practice</h2>
+        <p>Focused counsel across the matters our clients most often bring to us — not a generalist list, a working one.</p>
+      </div>
+      <div class="practice-grid reveal">
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <h3>Corporate & Business</h3>
+          <p>Formation, contracts, governance, and transactions for founders and growing companies.</p>
+        </div>
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><path d="M12 3v18M5 8l-3 6a4 4 0 0 0 6 0zM19 8l-3 6a4 4 0 0 0 6 0zM5 8h14"/></svg>
+          <h3>Litigation & Disputes</h3>
+          <p>Commercial and civil litigation from pre-suit strategy through trial and appeal.</p>
+        </div>
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <h3>Family Law</h3>
+          <p>Divorce, custody, and support matters handled with discretion and a steady hand.</p>
+        </div>
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><path d="M3 10l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+          <h3>Real Estate</h3>
+          <p>Purchase agreements, leasing, title disputes, and closings for owners and investors.</p>
+        </div>
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
+          <h3>Criminal Defense</h3>
+          <p>Representation at every stage, from arraignment through trial, across state courts.</p>
+        </div>
+
+        <div class="practice-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C6A15B" stroke-width="1.6"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <h3>Estate Planning</h3>
+          <p>Wills, trusts, and succession plans built to hold up when it matters most.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" style="background:var(--ink-2);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">How We Work</div>
+        <h2>From first call to resolution</h2>
+      </div>
+      <div class="process-row reveal">
+        <div class="process-step">
+          <span class="process-num">01</span>
+          <h3>Consultation</h3>
+          <p>We listen first — a candid conversation about your situation and what's realistic.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-num">02</span>
+          <h3>Strategy</h3>
+          <p>A written plan covering approach, timeline, and cost before any work begins.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-num">03</span>
+          <h3>Representation</h3>
+          <p>Direct partner involvement throughout — negotiation, filings, and court appearances.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-num">04</span>
+          <h3>Resolution</h3>
+          <p>Clear closing summary and, where relevant, guidance on what comes next.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Attorneys</div>
+        <h2>The people you'll actually work with</h2>
+      </div>
+      <div class="team-grid reveal">
+        <div class="team-card">
+          <div class="avatar">EV</div>
+          <h3>Elena Voss</h3>
+          <div class="role">Founding Partner — Corporate & Business</div>
+          <p>18 years advising founders and mid-size companies through formation, financing, and disputes.</p>
+        </div>
+        <div class="team-card">
+          <div class="avatar">MS</div>
+          <h3>Marcus Sterling</h3>
+          <div class="role">Founding Partner — Litigation</div>
+          <p>Trial attorney with a focus on commercial disputes and appellate practice.</p>
+        </div>
+        <div class="team-card">
+          <div class="avatar">RN</div>
+          <h3>Rachel Nakamura</h3>
+          <div class="role">Partner — Family & Estate Law</div>
+          <p>Handles family and estate matters with a focus on minimizing conflict and cost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Client Feedback</div>
+        <h2>What clients say</h2>
+      </div>
+      <div class="test-grid reveal">
+        <div class="test-card">
+          <span class="test-mark">&ldquo;</span>
+          <p>They gave us a straight answer about cost and timeline on day one, and stuck to it through a complicated negotiation.</p>
+          <div class="test-name">J. Alvarez</div>
+          <div class="test-role">Business owner</div>
+          <span class="placeholder-tag">Placeholder — replace with a real review</span>
+        </div>
+        <div class="test-card">
+          <span class="test-mark">&ldquo;</span>
+          <p>Rachel handled a difficult custody matter with more patience and clarity than I expected from any attorney.</p>
+          <div class="test-name">K. Whitfield</div>
+          <div class="test-role">Family law client</div>
+          <span class="placeholder-tag">Placeholder — replace with a real review</span>
+        </div>
+        <div class="test-card">
+          <span class="test-mark">&ldquo;</span>
+          <p>We've used Sterling & Voss for three separate matters now. Consistent, direct, and worth the rate.</p>
+          <div class="test-name">D. Okafor</div>
+          <div class="test-role">Repeat corporate client</div>
+          <span class="placeholder-tag">Placeholder — replace with a real review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap contact-grid">
+      <div class="reveal">
+        <div class="eyebrow">Get in Touch</div>
+        <h2>Have a matter in mind?</h2>
+        <p style="color:var(--parchment-dim); margin-top:0.6rem; max-width:40ch;">Tell us briefly what's going on. We respond to every inquiry within one business day.</p>
+        <ul class="contact-info" style="margin-top:2.2rem;">
+          <li><b>Office</b>200 Bar Street, Suite 14, New York, NY (placeholder address)</li>
+          <li><b>Phone</b>(555) 010-2020</li>
+          <li><b>Email</b>intake@sterlingvoss.example</li>
+          <li><b>Hours</b>Mon–Fri, 9:00 AM – 6:00 PM ET</li>
+        </ul>
+      </div>
+
+      <form id="contactForm" class="reveal" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" required>
+            <div class="field-error">Please enter your name.</div>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="field-error">Please enter a valid email.</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          <div class="field">
+            <label for="matter">Matter type</label>
+            <select id="matter" name="matter">
+              <option>Corporate & Business</option>
+              <option>Litigation & Disputes</option>
+              <option>Family Law</option>
+              <option>Real Estate</option>
+              <option>Criminal Defense</option>
+              <option>Estate Planning</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+          <div class="field-error">Please tell us briefly about your matter.</div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:0.4rem;">Send Inquiry</button>
+        <div class="form-msg" id="formMsg">Thanks — this is a demo form (no backend connected), but validation is fully working. Wire the submit handler to your email service or API to go live.</div>
       </form>
     </div>
-  </main>
-</div>
-<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
-<div class="toast" id="toast"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <a href="#home" class="brand">Sterling <span>&</span> Voss</a>
+      <ul class="footer-nav">
+        <li><a href="#about">About</a></li>
+        <li><a href="#practice">Practice Areas</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#team">Attorneys</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
+        <a href="#" aria-label="Twitter / X">Twitter</a>
+        <a href="#" aria-label="Google Business">Google</a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>&copy; 2026 Sterling & Voss, LLP. All rights reserved.</span>
+      <span>Attorney advertising. Prior results do not guarantee a similar outcome.</span>
+    </div>
+  </div>
+</footer>
 
 <script>
-const seed=[
- {id:'a1',name:'Santhosh',avatar:'S',status:'online',messages:[
-  {from:'them',text:'Hi! Welcome to Saso 👋',time:'10:12 AM'},
-  {from:'me',text:'Hi Santhosh!',time:'10:13 AM',read:true}
- ]},
- {id:'a2',name:'Friends Group',avatar:'F',status:'5 members',messages:[
-  {from:'them',text:'Anyone free this evening?',time:'9:42 AM'},
-  {from:'me',text:'Yes, I am free.',time:'9:45 AM',read:true}
- ]},
- {id:'a3',name:'Priya',avatar:'P',status:'last seen recently',messages:[
-  {from:'them',text:'Can you send the file?',time:'Yesterday'}
- ]},
-];
-let data=JSON.parse(localStorage.getItem('sasoData')||'null')||seed;
-let selected=null, tab='chats';
-const save=()=>localStorage.setItem('sasoData',JSON.stringify(data));
-function initials(name){return name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase()}
-function renderList(){
- const q=document.getElementById('search').value.toLowerCase();
- const list=document.getElementById('list');
- let items=data.filter(x=>x.name.toLowerCase().includes(q));
- if(tab==='contacts'){}
- if(tab==='calls'){list.innerHTML='<div class="empty" style="height:50vh"><div>No recent calls<br><small>Calling UI is available inside chats.</small></div></div>';return}
- list.innerHTML=items.map(x=>{
-   const last=x.messages[x.messages.length-1];
-   return `<div class="chatitem ${selected===x.id?'active':''}" onclick="openChat('${x.id}')">
-    <div class="avatar">${initials(x.name)}</div>
-    <div class="chatmeta"><div class="row"><div class="name">${esc(x.name)}</div><div class="time">${esc(last?.time||'')}</div></div>
-    <div class="preview">${last?.from==='me'?'You: ':''}${esc(last?.text||'No messages')}</div></div></div>`;
- }).join('');
-}
-function openChat(id){
- selected=id; const c=data.find(x=>x.id===id); if(!c)return;
- document.getElementById('empty').style.display='none'; document.getElementById('thread').style.display='flex';
- document.getElementById('theadAvatar').textContent=initials(c.name);
- document.getElementById('theadName').textContent=c.name; document.getElementById('theadStatus').textContent=c.status;
- renderMessages(); renderList();
- if(innerWidth<=820){document.getElementById('sidebar').classList.add('mobilehidden');document.getElementById('main').classList.add('mobilevisible')}
-}
-function renderMessages(){
- const c=data.find(x=>x.id===selected); if(!c)return;
- const box=document.getElementById('messages');
- box.innerHTML='<div class="day"><span>TODAY</span></div>'+c.messages.map(m=>`
- <div class="msg ${m.from==='me'?'me':'them'}"><div class="bubble">
- ${m.reply?`<div class="replypreview">${esc(m.reply)}</div>`:''}
- ${m.file?`<div>📎 ${esc(m.file)}</div>`:''}${esc(m.text||'')}
- <span class="msgtime">${esc(m.time||'now')} ${m.from==='me'?'<span class="read">✓✓</span>':''}</span>
- </div></div>`).join('');
- box.scrollTop=box.scrollHeight;
-}
-function send(){
- const t=document.getElementById('text'); const text=t.value.trim(); if(!text||!selected)return;
- const c=data.find(x=>x.id===selected); c.messages.push({from:'me',text,time:now(),read:true}); save(); t.value=''; t.style.height='auto'; renderMessages(); renderList();
- setTimeout(()=>{c.messages.push({from:'them',text:autoReply(text),time:now()});save();renderMessages();renderList();toast(c.name+' replied')},700);
-}
-function autoReply(t){
- const s=t.toLowerCase(); if(s.includes('hello')||s==='hi')return 'Hi! 👋'; if(s.includes('how are you'))return 'I am good! How are you?'; if(s.includes('?'))return 'Sure, I will get back to you soon.'; return 'Thanks for your message 🙂';
-}
-function attachFiles(){
- const f=document.getElementById('file').files; if(!selected||!f.length)return;
- const c=data.find(x=>x.id===selected); [...f].forEach(x=>c.messages.push({from:'me',file:x.name,text:'',time:now(),read:true}));
- save();renderMessages();renderList();toast(f.length+' file(s) attached');
-}
-function now(){return new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}
-function esc(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function setTab(btn,name){tab=name;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderList()}
-function mobileBack(){document.getElementById('sidebar').classList.remove('mobilehidden');document.getElementById('main').classList.remove('mobilevisible')}
-function newChat(){showModal('new')}
-function showModal(type){
- const overlay=document.getElementById('overlay'), modal=document.getElementById('modal'); overlay.style.display='block';
- if(type==='new')modal.innerHTML=`<div class="modalhead">New chat <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
- <div class="field"><label>Contact name</label><input id="newname" placeholder="e.g. Alex"></div>
- <div class="field"><label>Status</label><input id="newstatus" value="online"></div>
- <div class="modalfoot"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="createContact()">Create</button></div></div>`;
- if(type==='profile')modal.innerHTML=`<div class="modalhead">Profile <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
- <div class="field"><label>Your display name</label><input id="myname" value="${esc(localStorage.getItem('sasoName')||'Saso User')}"></div>
- <div class="field"><label>About</label><input id="myabout" value="${esc(localStorage.getItem('sasoAbout')||'Available')}"></div>
- <div class="modalfoot"><button class="primary" onclick="saveProfile()">Save</button></div></div>`;
- if(type==='settings')modal.innerHTML=`<div class="modalhead">Settings <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
- <div class="field"><label>Theme</label><select id="theme"><option>Dark</option><option>Light</option></select></div>
- <div class="field"><label>Data</label><button class="secondary" onclick="resetData()">Reset local chats</button></div>
- <div class="modalfoot"><button class="primary" onclick="saveSettings()">Save</button></div></div>`;
- if(type==='chat')modal.innerHTML=`<div class="modalhead">Chat options <button class="iconbtn" onclick="closeModal()">✕</button></div><div class="modalbody">
- <button class="secondary" onclick="toast('Chat muted');closeModal()">🔕 Mute notifications</button>
- <button class="secondary" style="margin-left:7px" onclick="toast('Search opened');closeModal()">⌕ Search messages</button>
- </div>`;
-}
-function closeModal(){document.getElementById('overlay').style.display='none'}
-function createContact(){const n=document.getElementById('newname').value.trim();if(!n)return;const id='c'+Date.now();data.unshift({id,name:n,avatar:initials(n),status:document.getElementById('newstatus').value||'online',messages:[]});save();closeModal();renderList();openChat(id)}
-function saveProfile(){localStorage.setItem('sasoName',document.getElementById('myname').value);localStorage.setItem('sasoAbout',document.getElementById('myabout').value);closeModal();toast('Profile saved')}
-function saveSettings(){const v=document.getElementById('theme').value;if(v==='Light'){document.documentElement.style.setProperty('--bg','#efeae2');document.documentElement.style.setProperty('--panel','#f0f2f5');document.documentElement.style.setProperty('--panel2','#f7f8fa');document.documentElement.style.setProperty('--text','#1f2c33');document.documentElement.style.setProperty('--muted','#667781');document.documentElement.style.setProperty('--bubble2','#fff');document.body.style.background='#efeae2'}else location.reload();closeModal()}
-function resetData(){if(confirm('Delete all local chats?')){localStorage.removeItem('sasoData');location.reload()}}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display='none',1800)}
-document.getElementById('composer').addEventListener('submit',e=>{e.preventDefault();send()});
-document.getElementById('text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
-document.getElementById('text').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});
-renderList();
+  // Mobile nav toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Contact form validation (demo only — no real submission)
+  const form = document.getElementById('contactForm');
+  const formMsg = document.getElementById('formMsg');
+
+  function validateField(field, condition){
+    field.classList.toggle('invalid', !condition);
+    return condition;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const message = document.getElementById('message');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const validName = validateField(name.closest('.field'), name.value.trim().length > 1);
+    const validEmail = validateField(email.closest('.field'), emailPattern.test(email.value.trim()));
+    const validMessage = validateField(message.closest('.field'), message.value.trim().length > 4);
+
+    if(validName && validEmail && validMessage){
+      formMsg.classList.add('show');
+      form.reset();
+    } else {
+      formMsg.classList.remove('show');
+    }
+  });
 </script>
+
 </body>
 </html>
